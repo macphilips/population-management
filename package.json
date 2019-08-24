@@ -1,0 +1,69 @@
+{
+  "name": "template",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "build:prod": "babel src --out-dir dist --copy-files --ignore node_modules",
+    "clean": "rm -rf dist && mkdir dist",
+    "build": "npm run clean && npm run build:prod",
+    "serve": "node dist/server.js",
+    "prestart": "npm run db:migrate",
+    "start": "NODE_ENV=production npm run build && npm run serve",
+    "start:dev": "NODE_ENV=development DEBUG=log nodemon --exec node --require @babel/register $NODE_DEBUG_OPTION src/server.js",
+    "lint": "node_modules/.bin/eslint ./src",
+    "lint:fix": "npm run lint '--fix'",
+    "pretest": "NODE_ENV=test npm run db:rollback && NODE_ENV=test npm run db:migrate",
+    "test": "jest --no-cache  --detectOpenHandles --runInBand --forceExit",
+    "db:seed": "node_modules/.bin/sequelize db:seed:all",
+    "db:migrate": "node_modules/.bin/sequelize db:migrate",
+    "db:rollback": "node_modules/.bin/sequelize db:migrate:undo:all",
+    "db:rollmigrate": "npm run db:rollback && npm run db:migrate && npm run db:seed"
+  },
+  "dependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "dotenv": "^8.1.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.17.2",
+    "express": "~4.16.0",
+    "jest": "^24.9.0",
+    "morgan": "~1.9.0",
+    "node-sass-middleware": "0.11.0",
+    "nodemon": "^1.18.11",
+    "pg": "^7.12.1",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^5.15.2",
+    "sequelize-cli": "^5.4.0",
+    "supertest": "^4.0.2",
+    "swagger-jsdoc": "^3.4.0",
+    "swagger-ui-express": "^4.0.7"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.4.3",
+    "@babel/core": "^7.4.3",
+    "@babel/plugin-proposal-object-rest-spread": "^7.4.3",
+    "@babel/preset-env": "^7.4.3",
+    "@babel/register": "^7.4.4",
+    "babel-eslint": "^10.0.1",
+    "babel-jest": "^24.7.1",
+    "eslint": "^5.16.0",
+    "nodemon": "^1.18.11"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "src/**/*.js",
+      "!src/server.js"
+    ],
+    "testMatch": [
+      "<rootDir>/src/**/?(*.)(spec|test).js"
+    ],
+    "coveragePathIgnorePatterns": [
+      "<rootDir>/src/database/migrations",
+      "<rootDir>/src/database/seeders",
+      "<rootDir>/src/database/models/index.js"
+    ],
+    "testEnvironment": "node"
+  }
+}
