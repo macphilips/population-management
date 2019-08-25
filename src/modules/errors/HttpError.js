@@ -1,7 +1,6 @@
 export const errors = {
-  USR_01: field => `${field} already exists`,
-  USR_02: 'Contact with given ID doesn\'t exists',
-  USR_03: 'Entity with given ID doesn\'t exists',
+  LOC_02: 'Location doesn\'t exist',
+  LOC_03: parentId => `${parentId} doesn't exist`,
 };
 
 class HttpError extends Error {
